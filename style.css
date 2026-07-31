@@ -1,4 +1,5 @@
 :root {
+    /* Paleta extraída da imagem de referência */
     --amarelo: #FFD15C;
     --coral: #FF7E7E;
     --magenta: #D23F6A;
@@ -8,45 +9,48 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Corpo da página ajustado para não ter rolagem e centralizar tudo */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--dark);
     display: flex;
     justify-content: center;
-    align-items: center; 
-    min-height: 100vh;
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh; /* Ocupa 100% da altura da tela */
     padding: 10px;
     position: relative;
+    overflow: hidden; /* Trava qualquer rolagem (scroll) */
 }
 
+/* Container mais compacto */
 .container { 
     text-align: center; 
-    width: 100%;
     max-width: 550px; 
     z-index: 1; 
     background: rgba(255, 255, 255, 0.85); 
-    padding: 20px;
+    padding: 20px; /* Reduzido de 30px */
     border-radius: 15px;
     border: 3px solid var(--dark);
     box-shadow: 4px 4px 0px var(--amarelo);
 }
 
+/* Textos e títulos menores */
 h1 { margin-bottom: 5px; color: var(--magenta); font-size: 1.8rem; }
 p { margin-bottom: 15px; color: #555; font-size: 0.9rem; font-weight: 500; }
 h3 { margin-bottom: 10px; color: var(--magenta); font-size: 1.1rem; }
 
+/* Botões do topo mais próximos */
 .top-controls {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-bottom: 15px;
-    flex-wrap: wrap;
 }
 
 select, button {
-    padding: 6px 12px;
-    font-size: 14px; 
+    padding: 6px 12px; /* Margens internas reduzidas */
+    font-size: 14px; /* Fonte reduzida */
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
@@ -59,13 +63,14 @@ select, button {
 
 button:hover, select:hover {
     transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px var(--dark);
+    box-shadow: 0px 0px 0px var(--dark); /* Sombra recolhe ao clicar */
 }
 
 button#btn-new { background-color: var(--coral); color: white; }
 button#btn-reset { background-color: var(--amarelo); }
 button#btn-erase { background-color: #fff; }
 
+/* Tabuleiro Levemente Maior (Células ajustadas para 40px) */
 .board {
     display: grid;
     grid-template-columns: repeat(9, 40px);
@@ -107,13 +112,13 @@ button#btn-erase { background-color: #fff; }
     object-fit: contain;
 }
 
+/* Paleta de Sinais (Botões de 50px para 38px) */
 .palette-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
-    flex-wrap: wrap;
 }
 
 .palette { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; }
@@ -129,17 +134,26 @@ button#btn-erase { background-color: #fff; }
     align-items: center;
     justify-content: center;
     box-shadow: 2px 2px 0px var(--dark);
+    transition: all 0.1s;
+}
+
+.palette-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 0px var(--dark);
+    background-color: var(--bg-color);
 }
 
 #feedback-msg { font-size: 15px; font-weight: bold; margin-top: 5px; min-height: 20px; }
 .success-text { color: var(--magenta); }
 
+/* Decorações reduzidas proporcionalmente */
 .decorations img {
     position: fixed;
     z-index: 0;
     opacity: 0.25;
-    max-width: 90px; 
+    max-width: 90px; /* Reduzido para não roubar a cena */
     pointer-events: none;
+    transition: transform 0.3s ease;
 }
 
 .dec-1 { top: 5%; left: 5%; transform: rotate(-15deg); }
@@ -149,40 +163,3 @@ button#btn-erase { background-color: #fff; }
 .dec-5 { top: 40%; left: -20px; transform: rotate(45deg); opacity: 0.15; }
 .dec-6 { top: 50%; right: -20px; transform: rotate(-30deg); opacity: 0.15; }
 .dec-7 { top: -20px; left: 45%; transform: rotate(180deg); opacity: 0.15; }
-
-@media screen and (max-width: 480px) {
-    .container { 
-        padding: 15px 10px; 
-        border-width: 2px; 
-        width: 95%; /* Garante uma pequena margem na tela toda */
-    }
-    
-    h1 { font-size: 1.5rem; }
-    
-    .board {
-        width: 100%; /* Força o tabuleiro a não vazar o container */
-        grid-template-columns: repeat(9, 1fr); /* 9 colunas responsivas */
-        grid-template-rows: repeat(9, 1fr); /* 9 linhas responsivas */
-        margin-bottom: 10px;
-    }
-    
-    .cell {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1; /* Força a célula a ser um quadrado perfeito */
-    }
-    
-    .palette-btn {
-        width: 10vw;
-        height: 10vw;
-        max-width: 45px;
-        max-height: 45px;
-    }
-    
-    .decorations { display: none; }
-    
-    .top-controls select, .top-controls button {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
-}
