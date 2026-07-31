@@ -96,6 +96,7 @@ button#btn-erase { background-color: #fff; }
     transition: background-color 0.2s;
 }
 
+
 .cell:nth-child(3n) { border-right: 2px solid var(--dark); }
 .cell:nth-child(9n) { border-right: none; }
 .cell:nth-child(n+19):nth-child(-n+27),
