@@ -15,18 +15,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center; 
-    min-height: 100vh; 
+    min-height: 100vh;
     padding: 10px;
     position: relative;
-    overflow: hidden; 
 }
 
 .container { 
     text-align: center; 
+    width: 100%;
     max-width: 550px; 
     z-index: 1; 
     background: rgba(255, 255, 255, 0.85); 
-    padding: 20px; /* Reduzido de 30px */
+    padding: 20px;
     border-radius: 15px;
     border: 3px solid var(--dark);
     box-shadow: 4px 4px 0px var(--amarelo);
@@ -34,6 +34,150 @@ body {
 
 h1 { margin-bottom: 5px; color: var(--magenta); font-size: 1.8rem; }
 p { margin-bottom: 15px; color: #555; font-size: 0.9rem; font-weight: 500; }
+h3 { margin-bottom: 10px; color: var(--magenta); font-size: 1.1rem; }
+
+.top-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+select, button {
+    padding: 6px 12px;
+    font-size: 14px; 
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid var(--dark);
+    background-color: #fff;
+    color: var(--dark);
+    box-shadow: 2px 2px 0px var(--dark);
+    transition: all 0.1s ease-in-out;
+}
+
+button:hover, select:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--dark);
+}
+
+button#btn-new { background-color: var(--coral); color: white; }
+button#btn-reset { background-color: var(--amarelo); }
+button#btn-erase { background-color: #fff; }
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 40px);
+    grid-template-rows: repeat(9, 40px);
+    gap: 0;
+    margin: 0 auto 15px auto;
+    border: 3px solid var(--dark);
+    border-radius: 6px;
+    width: fit-content;
+    background-color: #fff;
+    box-shadow: 4px 4px 0px rgba(34, 34, 34, 0.15);
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+
+.cell:nth-child(3n) { border-right: 2px solid var(--dark); }
+.cell:nth-child(9n) { border-right: none; }
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--dark); }
+
+.cell.initial { background-color: #F0F0F0; cursor: not-allowed; }
+.cell.selected { background-color: var(--amarelo); border: 2px solid var(--dark); }
+.cell.error { background-color: var(--coral); opacity: 0.8; }
+.cell.correct { background-color: #a8d5ba; }
+
+.cell img, .palette-btn img {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+}
+
+.palette-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.palette { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; }
+
+.palette-btn {
+    width: 38px;
+    height: 38px;
+    border: 2px solid var(--dark);
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0px var(--dark);
+}
+
+#feedback-msg { font-size: 15px; font-weight: bold; margin-top: 5px; min-height: 20px; }
+.success-text { color: var(--magenta); }
+
+.decorations img {
+    position: fixed;
+    z-index: 0;
+    opacity: 0.25;
+    max-width: 90px; 
+    pointer-events: none;
+}
+
+.dec-1 { top: 5%; left: 5%; transform: rotate(-15deg); }
+.dec-2 { bottom: 5%; left: 8%; transform: rotate(10deg); max-width: 110px; }
+.dec-3 { top: 10%; right: 5%; transform: rotate(20deg); }
+.dec-4 { bottom: 5%; right: 10%; transform: rotate(-10deg); max-width: 80px; }
+.dec-5 { top: 40%; left: -20px; transform: rotate(45deg); opacity: 0.15; }
+.dec-6 { top: 50%; right: -20px; transform: rotate(-30deg); opacity: 0.15; }
+.dec-7 { top: -20px; left: 45%; transform: rotate(180deg); opacity: 0.15; }
+
+@media screen and (max-width: 480px) {
+    .container { padding: 15px 10px; border-width: 2px; }
+    
+    h1 { font-size: 1.5rem; }
+    
+    .board {
+        grid-template-columns: repeat(9, 9.5vw);
+        grid-template-rows: repeat(9, 9.5vw);
+        margin-bottom: 10px;
+    }
+    
+    .cell {
+        width: 9.5vw;
+        height: 9.5vw;
+    }
+    
+    .palette-btn {
+        width: 10vw;
+        height: 10vw;
+    }
+    
+    .decorations { display: none; }
+    
+    .top-controls select, .top-controls button {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+}
 h3 { margin-bottom: 10px; color: var(--magenta); font-size: 1.1rem; }
 
 .top-controls {
