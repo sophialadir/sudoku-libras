@@ -1,21 +1,20 @@
-class SudokuGenerator {
+class classSudoku {
     constructor(holes) {
         this.N = 9;
-        this.SRN = 3; // Raiz quadrada de 9
-        this.holes = holes; // Quantidade de células vazias
-        this.grid = Array.from({ length: 9 }, () => Array(9).fill(0));
-        this.solution = [];
+        this.SRN = 3; 
+        this.holes = holes;
+        this.matriz = Array.from({ length: 9 }, () => Array(9).fill(0));
+        this.gabarito_final = [];
     }
 
-    generate() {
+    gerar_tudo() {
         this.fillDiagonal();
-        this.fillRemaining(0, this.SRN);
+        this.fillResto(0, this.SRN);
         
-        // Salva o gabarito completo antes de apagar os buracos
-        this.solution = this.grid.map(row => [...row]);
+        this.gabarito_final = this.matriz.map(row => [...row]);
         
-        this.removeDigits();
-        return { grid: this.grid, solution: this.solution };
+        this.tirarNumeros();
+        return { grid: this.matriz, solution: this.gabarito_final };
     }
 
     fillDiagonal() {
@@ -24,10 +23,10 @@ class SudokuGenerator {
         }
     }
 
-    unUsedInBox(rowStart, colStart, num) {
+    naoUsadoBox(rowStart, colStart, num) {
         for (let i = 0; i < this.SRN; i++) {
             for (let j = 0; j < this.SRN; j++) {
-                if (this.grid[rowStart + i][colStart + j] === num) return false;
+                if (this.matriz[rowStart + i][colStart + j] === num) return false;
             }
         }
         return true;
@@ -39,35 +38,35 @@ class SudokuGenerator {
             for (let j = 0; j < this.SRN; j++) {
                 do {
                     num = Math.floor(Math.random() * this.N) + 1;
-                } while (!this.unUsedInBox(rowStart, colStart, num));
-                this.grid[rowStart + i][colStart + j] = num;
+                } while (!this.naoUsadoBox(rowStart, colStart, num));
+                this.matriz[rowStart + i][colStart + j] = num;
             }
         }
     }
 
-    checkIfSafe(i, j, num) {
+    checkSafe(i, j, num) {
         return (
-            this.unUsedInRow(i, num) &&
-            this.unUsedInCol(j, num) &&
-            this.unUsedInBox(i - (i % this.SRN), j - (j % this.SRN), num)
+            this.naoUsadoRow(i, num) &&
+            this.naoUsadoCol(j, num) &&
+            this.naoUsadoBox(i - (i % this.SRN), j - (j % this.SRN), num)
         );
     }
 
-    unUsedInRow(i, num) {
+    naoUsadoRow(i, num) {
         for (let j = 0; j < this.N; j++) {
-            if (this.grid[i][j] === num) return false;
+            if (this.matriz[i][j] === num) return false;
         }
         return true;
     }
 
-    unUsedInCol(j, num) {
+    naoUsadoCol(j, num) {
         for (let i = 0; i < this.N; i++) {
-            if (this.grid[i][j] === num) return false;
+            if (this.matriz[i][j] === num) return false;
         }
         return true;
     }
 
-    fillRemaining(i, j) {
+    fillResto(i, j) {
         if (j >= this.N && i < this.N - 1) {
             i = i + 1;
             j = 0;
@@ -87,193 +86,193 @@ class SudokuGenerator {
         }
 
         for (let num = 1; num <= this.N; num++) {
-            if (this.checkIfSafe(i, j, num)) {
-                this.grid[i][j] = num;
-                if (this.fillRemaining(i, j + 1)) return true;
-                this.grid[i][j] = 0;
+            if (this.checkSafe(i, j, num)) {
+                this.matriz[i][j] = num;
+                if (this.fillResto(i, j + 1)) return true;
+                this.matriz[i][j] = 0;
             }
         }
         return false;
     }
 
-    removeDigits() {
+    tirarNumeros() {
         let count = this.holes;
         while (count !== 0) {
             let cellId = Math.floor(Math.random() * (this.N * this.N));
             let i = Math.floor(cellId / this.N);
             let j = cellId % 9;
-            if (this.grid[i][j] !== 0) {
+            if (this.matriz[i][j] !== 0) {
                 count--;
-                this.grid[i][j] = 0;
+                this.matriz[i][j] = 0;
             }
         }
     }
 }
 
-// Variáveis de Estado
-let currentGrid = [];
-let currentSolution = [];
-let currentInitialGrid = []; // Guarda o estado limpo da rodada para o botão "Reiniciar"
-let selectedCell = null;
+var gridAtual = [];
+let gabarito = [];
+var grid_copia = []; 
+let selectCell = null;
 
-const boardElement = document.getElementById('sudoku-board');
-const paletteElement = document.getElementById('number-palette');
-const difficultySelect = document.getElementById('difficulty');
-const feedbackMsg = document.getElementById('feedback-msg');
+const bElement = document.getElementById('sudoku-board');
+const pElement = document.getElementById('number-palette');
+const diffSelect = document.getElementById('difficulty');
+const msg = document.getElementById('feedback-msg');
 
-function loadGame() {
-    const level = difficultySelect.value;
-    let holes = 40; // Padrão
+function carregaJogo() {
+    let lvl = diffSelect.value;
+    let h = 40; 
 
-    // Define a quantidade de células vazias baseada na dificuldade
-    if (level === 'easy') holes = 35;       // Restam 46 dicas
-    else if (level === 'medium') holes = 48; // Restam 33 dicas
-    else if (level === 'hard') holes = 58;   // Restam apenas 23 dicas
+    if (lvl == 'easy') {
+        h = 35;
+    } else if (lvl == 'medium') {
+        h = 48;
+    } else if (lvl == 'hard') {
+        h = 58;
+    }
 
-    const sudoku = new SudokuGenerator(holes);
-    const puzzle = sudoku.generate();
+    var game = new classSudoku(h);
+    let result = game.gerar_tudo();
     
-    currentGrid = puzzle.grid;
-    currentSolution = puzzle.solution;
+    gridAtual = result.grid;
+    gabarito = result.solution;
     
-    // Salva uma cópia profunda para poder reiniciar o mesmo tabuleiro
-    currentInitialGrid = JSON.parse(JSON.stringify(currentGrid)); 
+    grid_copia = JSON.parse(JSON.stringify(gridAtual)); 
     
-    feedbackMsg.textContent = '';
-    selectedCell = null;
-    drawBoard();
+    msg.textContent = '';
+    selectCell = null;
+    desenhaGrid();
 }
 
-// Desenha o tabuleiro na tela
-function drawBoard() {
-    boardElement.innerHTML = '';
+function desenhaGrid() {
+    bElement.innerHTML = '';
     
-    // Se estivermos apenas reiniciando, restaura o grid para o estado inicial
-    currentGrid = JSON.parse(JSON.stringify(currentInitialGrid));
+    gridAtual = JSON.parse(JSON.stringify(grid_copia));
 
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
-            const cellValue = currentGrid[r][c];
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.row = r;
-            cell.dataset.col = c;
+            let valor = gridAtual[r][c];
+            var divCell = document.createElement('div');
+            divCell.classList.add('cell');
+            divCell.dataset.row = r;
+            divCell.dataset.col = c;
             
-            if (cellValue !== 0) {
-                cell.classList.add('initial');
-                cell.appendChild(createImage(cellValue));
-                cell.dataset.value = cellValue;
+            if (valor !== 0) {
+                divCell.classList.add('initial');
+                divCell.appendChild(criaImg(valor));
+                divCell.dataset.value = valor;
             } else {
-                cell.addEventListener('click', () => selectCell(cell));
+                divCell.addEventListener('click', () => fSelect(divCell));
             }
-            boardElement.appendChild(cell);
+            bElement.appendChild(divCell);
         }
     }
 }
 
-function createImage(number) {
-    const img = document.createElement('img');
-    img.src = `imagens/${number}.png`;
-    img.alt = `Sinal ${number}`;
-    return img;
+function criaImg(n) {
+    let i = document.createElement('img');
+    i.src = `imagens/${n}.png`;
+    i.alt = `Sinal ${n}`;
+    return i;
 }
 
-function selectCell(cell) {
-    if (cell.classList.contains('initial')) return;
-    if (selectedCell) selectedCell.classList.remove('selected');
-    selectedCell = cell;
-    selectedCell.classList.add('selected');
+function fSelect(c) {
+    if (c.classList.contains('initial')) return;
+    if (selectCell != null) selectCell.classList.remove('selected');
+    selectCell = c;
+    selectCell.classList.add('selected');
 }
 
-function fillCell(number) {
-    if (!selectedCell || selectedCell.classList.contains('initial')) return;
+function botaNumero(n) {
+    if (selectCell == null || selectCell.classList.contains('initial')) {
+        return;
+    }
     
-    const r = parseInt(selectedCell.dataset.row);
-    const c = parseInt(selectedCell.dataset.col);
+    let row = parseInt(selectCell.dataset.row);
+    let col = parseInt(selectCell.dataset.col);
     
-    selectedCell.innerHTML = '';
-    selectedCell.appendChild(createImage(number));
-    selectedCell.dataset.value = number;
-    currentGrid[r][c] = number;
+    selectCell.innerHTML = '';
+    selectCell.appendChild(criaImg(n));
+    selectCell.dataset.value = n;
+    gridAtual[row][col] = n;
     
-    selectedCell.classList.remove('error', 'correct');
-    if (number === currentSolution[r][c]) {
-        selectedCell.classList.add('correct');
+    selectCell.classList.remove('error', 'correct');
+    
+    if (n === gabarito[row][col]) {
+        selectCell.classList.add('correct');
     } else {
-        selectedCell.classList.add('error');
+        selectCell.classList.add('error');
     }
     
-    checkWinCondition();
+    verificaVitoria();
 }
 
-function eraseCell() {
-    if (selectedCell && !selectedCell.classList.contains('initial')) {
-        selectedCell.innerHTML = '';
-        delete selectedCell.dataset.value;
+function deletar() {
+    if (selectCell && !selectCell.classList.contains('initial')) {
+        selectCell.innerHTML = '';
+        delete selectCell.dataset.value;
         
-        const r = parseInt(selectedCell.dataset.row);
-        const c = parseInt(selectedCell.dataset.col);
-        currentGrid[r][c] = 0;
+        var row = parseInt(selectCell.dataset.row);
+        var col = parseInt(selectCell.dataset.col);
+        gridAtual[row][col] = 0;
         
-        selectedCell.classList.remove('error', 'correct');
-        feedbackMsg.textContent = '';
+        selectCell.classList.remove('error', 'correct');
+        msg.textContent = '';
     }
 }
 
-function checkWinCondition() {
-    const cells = document.querySelectorAll('.cell');
-    let isCompleteAndCorrect = true;
+function verificaVitoria() {
+    let divCells = document.querySelectorAll('.cell');
+    let win = true;
 
-    for (let cell of cells) {
-        const r = parseInt(cell.dataset.row);
-        const c = parseInt(cell.dataset.col);
-        const val = parseInt(cell.dataset.value);
+    for (let c of divCells) {
+        let r = parseInt(c.dataset.row);
+        let col = parseInt(c.dataset.col);
+        let v = parseInt(c.dataset.value);
 
-        if (!val || val !== currentSolution[r][c]) {
-            isCompleteAndCorrect = false;
+        if (!v || v !== gabarito[r][col]) {
+            win = false;
             break;
         }
     }
 
-    if (isCompleteAndCorrect) {
-        feedbackMsg.textContent = "Parabéns! Você resolveu o Sudoku em Libras!";
-        feedbackMsg.className = 'success-text';
+    if (win == true) {
+        msg.textContent = "Parabéns! Você resolveu o Sudoku em Libras!";
+        msg.className = 'success-text';
     } else {
-        feedbackMsg.textContent = "";
+        msg.textContent = "";
     }
 }
 
-function initPalette() {
-    paletteElement.innerHTML = '';
-    for (let i = 1; i <= 9; i++) {
-        const btn = document.createElement('div');
-        btn.classList.add('palette-btn');
-        btn.appendChild(createImage(i));
+function startPaleta() {
+    pElement.innerHTML = '';
+    for (var x = 1; x <= 9; x++) {
+        let b = document.createElement('div');
+        b.classList.add('palette-btn');
+        b.appendChild(criaImg(x));
         
-        btn.addEventListener('click', () => fillCell(i));
-        paletteElement.appendChild(btn);
+        let valorFixo = x; 
+        b.addEventListener('click', () => botaNumero(valorFixo));
+        pElement.appendChild(b);
     }
 }
 
-// Eventos de Teclado
 document.addEventListener('keydown', (e) => {
     if (e.key >= '1' && e.key <= '9') {
-        fillCell(parseInt(e.key));
-    } else if (e.key === 'Backspace' || e.key === 'Delete') {
-        eraseCell();
+        botaNumero(parseInt(e.key));
+    } else if (e.key == 'Backspace' || e.key == 'Delete') {
+        deletar();
     }
 });
 
-// Botões de Ação
-document.getElementById('btn-erase').addEventListener('click', eraseCell);
-document.getElementById('btn-new').addEventListener('click', loadGame);
+document.getElementById('btn-erase').addEventListener('click', deletar);
+document.getElementById('btn-new').addEventListener('click', carregaJogo);
 document.getElementById('btn-reset').addEventListener('click', () => {
-    drawBoard();
-    feedbackMsg.textContent = '';
+    desenhaGrid();
+    msg.textContent = '';
 });
 
-// Troca de dificuldade aciona um novo jogo automaticamente
-difficultySelect.addEventListener('change', loadGame);
+diffSelect.addEventListener('change', carregaJogo);
 
-initPalette();
-loadGame();
+startPaleta();
+carregaJogo();
