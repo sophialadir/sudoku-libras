@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Decorações de fundo -->
     <div class="decorations">
-        <img src="imagens/decoracao1.jpg" class="dec dec-1" alt="">
-        <img src="imagens/decoracao2.jpg" class="dec dec-2" alt="">
-        <img src="imagens/decoracao3.jpg" class="dec dec-3" alt="">
-        <img src="imagens/decoracao4.jpg" class="dec dec-4" alt="">
-        <img src="imagens/decoracao5.jpg" class="dec dec-5" alt="">
-        <img src="imagens/decoracao6.jpg" class="dec dec-6" alt="">
-        <img src="imagens/decoracao7.jpg" class="dec dec-7" alt="">
+        <img src="imagens/decoracao1.png" class="dec dec-1" alt="">
+        <img src="imagens/decoracao2.png" class="dec dec-2" alt="">
+        <img src="imagens/decoracao3.png" class="dec dec-3" alt="">
+        <img src="imagens/decoracao4.png" class="dec dec-4" alt="">
+        <img src="imagens/decoracao5.png" class="dec dec-5" alt="">
+        <img src="imagens/decoracao6.png" class="dec dec-6" alt="">
+        <img src="imagens/decoracao7.png" class="dec dec-7" alt="">
     </div>
 
     <div class="container">
         <h1>Sudoku em Libras</h1>
-
-        <!-- Menu de Controle -->
+        <p>Selecione uma célula vazia e clique no sinal (ou use o teclado) para preencher.</p>
+        
         <div class="top-controls">
             <select id="difficulty">
                 <option value="easy">Fácil</option>
@@ -34,6 +33,21 @@
         
         <div id="sudoku-board" class="board"></div>
         
+        <div class="controls">
+            <h3>Paleta de Sinais</h3>
+            
+            <div class="palette-container">
+                <div id="number-palette" class="palette"></div>
+                <button id="btn-erase" title="Apagar (Backspace ou Delete)">⌫ Apagar</button>
+            </div>
+            
+            <p id="feedback-msg"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
         <div class="controls">            
             <div class="palette-container">
                 <div id="number-palette" class="palette"></div>
