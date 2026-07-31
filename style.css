@@ -151,24 +151,32 @@ button#btn-erase { background-color: #fff; }
 .dec-7 { top: -20px; left: 45%; transform: rotate(180deg); opacity: 0.15; }
 
 @media screen and (max-width: 480px) {
-    .container { padding: 15px 10px; border-width: 2px; }
+    .container { 
+        padding: 15px 10px; 
+        border-width: 2px; 
+        width: 95%; /* Garante uma pequena margem na tela toda */
+    }
     
     h1 { font-size: 1.5rem; }
     
     .board {
-        grid-template-columns: repeat(9, 9.5vw);
-        grid-template-rows: repeat(9, 9.5vw);
+        width: 100%; /* Força o tabuleiro a não vazar o container */
+        grid-template-columns: repeat(9, 1fr); /* 9 colunas responsivas */
+        grid-template-rows: repeat(9, 1fr); /* 9 linhas responsivas */
         margin-bottom: 10px;
     }
     
     .cell {
-        width: 9.5vw;
-        height: 9.5vw;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1; /* Força a célula a ser um quadrado perfeito */
     }
     
     .palette-btn {
         width: 10vw;
         height: 10vw;
+        max-width: 45px;
+        max-height: 45px;
     }
     
     .decorations { display: none; }
