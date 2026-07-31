@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku em Libras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Decorações de fundo -->
+    <div class="decorations">
+        <img src="imagens/decoracao1.jpg" class="dec dec-1" alt="">
+        <img src="imagens/decoracao2.jpg" class="dec dec-2" alt="">
+        <img src="imagens/decoracao3.jpg" class="dec dec-3" alt="">
+        <img src="imagens/decoracao4.jpg" class="dec dec-4" alt="">
+        <img src="imagens/decoracao5.jpg" class="dec dec-5" alt="">
+        <img src="imagens/decoracao6.jpg" class="dec dec-6" alt="">
+        <img src="imagens/decoracao7.jpg" class="dec dec-7" alt="">
+    </div>
+
+    <div class="container">
+        <h1>Sudoku em Libras</h1>
+
+        <!-- Menu de Controle -->
+        <div class="top-controls">
+            <select id="difficulty">
+                <option value="easy">Fácil</option>
+                <option value="medium">Médio</option>
+                <option value="hard">Difícil</option>
+            </select>
+            <button id="btn-new">Novo Jogo</button>
+            <button id="btn-reset">Reiniciar Tabuleiro</button>
+        </div>
+        
+        <div id="sudoku-board" class="board"></div>
+        
+        <div class="controls">            
+            <div class="palette-container">
+                <div id="number-palette" class="palette"></div>
+                <button id="btn-erase" title="Apagar (Backspace ou Delete)">⌫</button>
+            </div>
+            
+            <p id="feedback-msg"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
